@@ -1,0 +1,67 @@
+name: Post coupons to Facebook
+
+on:
+  schedule:
+    # every 2 hours at minute 0
+    - cron: '0 */2 * * *'
+  workflow_dispatch: {}  # allows manual run
+
+permissions:
+  contents: write   # needed to commit state.json back to repo
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true  # allow git push with GITHUB_TOKEN
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip && pip install -r requirements.txt
+
+      - name: Run Facebook poster script
+        env:
+          FACEBOOK_PAGE_ID: ${{ secrets.FACEBOOK_PAGE_ID }}
+          FACEBOOK_ACCESS_TOKEN: ${{ secrets.FACEBOOK_ACCESS_TOKEN }}
+          COUPONS_API_URL: "https://receivecoupons.com/api/my_api.php"
+          STATE_FILE: "state.json"
+        run: |
+          python post_to_facebook.py
+```
+
+---
+
+## 🔐 **GitHub Secrets المطلوبة:**
+
+يجب إضافة هذه المتغيرات في **Settings → Secrets and variables → Actions → New repository secret**:
+
+### 1️⃣ `FACEBOOK_PAGE_ID`
+```
+788601581009376
+```
+
+### 2️⃣ `FACEBOOK_ACCESS_TOKEN`
+```
+EAAP8463F8jEBPuwdcmjkqaAY3OEAz6pkkwZAaZCl3luPOsoVtXqXXTC3Qm2e1qmXApsMXjNbGr5wg2hP356VYkIfrbIsC3PFYl4FnVfQcfalZB1w5PjERbZCdm38FCgvl4kdQOXvlCja36u0N5WOsqux2WdLZBdRXYL3WZAapzXRRlx2qax77JOuUAjuOKe3NT3USB
+```
+
+---
+
+## 📂 **هيكل المشروع:**
+```
+facebook-coupon-poster/
+│
+├── .github/
+│   └── workflows/
+│       └── facebook_post.yml
+│
+├── post_to_facebook.py
+├── requirements.txt
+└── state.json
