@@ -30,7 +30,7 @@ jobs:
         env:
           FACEBOOK_PAGE_ID: ${{ secrets.FACEBOOK_PAGE_ID }}
           FACEBOOK_ACCESS_TOKEN: ${{ secrets.FACEBOOK_ACCESS_TOKEN }}
-          COUPONS_API_URL: "https://receivecoupons.com/api/my_api.php"
+          COUPONS_API_URL: "https://receivecoupons.com/api/my_api.php?only_active=1&all=1"
           STATE_FILE: "state.json"
         run: |
           python post_to_facebook.py
