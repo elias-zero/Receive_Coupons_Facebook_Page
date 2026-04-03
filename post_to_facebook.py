@@ -18,7 +18,7 @@ import requests
 from dateutil import parser as date_parser
 
 # Config (can override via env)
-API_URL = os.getenv("COUPONS_API_URL", "https://receivecoupons.com/api/my_api.php")
+API_URL = os.getenv("COUPONS_API_URL", "https://receivecoupons.com/api/my_api.php?only_active=1&all=1")
 STATE_FILE = os.getenv("STATE_FILE", "state.json")
 FACEBOOK_PAGE_ID = os.getenv("FACEBOOK_PAGE_ID")
 FACEBOOK_ACCESS_TOKEN = os.getenv("FACEBOOK_ACCESS_TOKEN")
